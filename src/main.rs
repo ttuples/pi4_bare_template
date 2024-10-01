@@ -1,6 +1,8 @@
 #![no_std]
 #![no_main]
 
+use core::arch::asm;
+
 mod boot {
     use core::arch::global_asm;
 
@@ -19,13 +21,13 @@ pub extern "C" fn _start() -> ! {
             // Turn pin 21 on
             core::ptr::write_volatile(0x3F20_001C as *mut u32, 1<<3);
             for _ in 0..500000 {
-                core::ptr::read_volatile(0x3F20_001C as *const u32);
+                asm!("nop");
             }
 
             // Turn pin 21 off
             core::ptr::write_volatile(0x3F20_0028 as *mut u32, 1<<3);
             for _ in 0..500000 {
-                core::ptr::read_volatile(0x3F20_001C as *const u32);
+                asm!("nop");
             }
         }
     }
